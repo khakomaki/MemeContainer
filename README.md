@@ -1,6 +1,6 @@
 # MemeContainer
 
-Android & Desktop Application
+Android & Desktop Application for storing Memes.
 
 ## MVP Features
 
@@ -9,6 +9,7 @@ Android & Desktop Application
 - Tag Memes
 - Meme Folders
 - Offline Backup
+- Search by Tag
 
 ## AI Features
 
@@ -20,6 +21,7 @@ Android & Desktop Application
 - Lower Quality
 - User Accounts
 - Sharing Memes
+- Uploading Videos
 
 ## User Stories
 

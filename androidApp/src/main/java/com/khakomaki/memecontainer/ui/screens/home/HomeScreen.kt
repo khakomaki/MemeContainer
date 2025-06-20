@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.khakomaki.memecontainer.ui.components.AddMemeFAB
+import com.khakomaki.memecontainer.ui.memes.AddMemeFAB
 import com.khakomaki.memecontainer.ui.screens.home.components.HomeTabBar
 import com.khakomaki.memecontainer.ui.screens.home.components.HomeTabContent
 import com.khakomaki.memecontainer.ui.screens.home.components.HomeTopBar

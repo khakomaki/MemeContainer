@@ -4,15 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.khakomaki.memecontainer.ui.components.MemeCard
+import com.khakomaki.memecontainer.ui.components.Grid
+import com.khakomaki.memecontainer.ui.memes.MemeCard
 
 @Composable
 fun AllMemesTab(onMemeClick: (String) -> Unit) {
@@ -28,13 +26,14 @@ fun AllMemesTab(onMemeClick: (String) -> Unit) {
                 .padding(8.dp)
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            modifier = Modifier.padding(8.dp)
-        ) {
-            items(memes) { meme ->
-                MemeCard(meme, onClick = { onMemeClick(meme) })
-            }
+        Grid(
+            items = memes,
+            modifier = Modifier.weight(1f)
+        ) { meme ->
+            MemeCard(
+                name = meme,
+                onClick = { onMemeClick(meme) }
+            )
         }
     }
 }

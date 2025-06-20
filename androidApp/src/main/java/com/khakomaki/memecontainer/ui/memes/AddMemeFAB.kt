@@ -1,4 +1,4 @@
-package com.khakomaki.memecontainer.ui.components
+package com.khakomaki.memecontainer.ui.memes
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

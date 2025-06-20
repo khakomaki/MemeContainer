@@ -1,4 +1,4 @@
-package com.khakomaki.memecontainer.ui.components
+package com.khakomaki.memecontainer.ui.memes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
