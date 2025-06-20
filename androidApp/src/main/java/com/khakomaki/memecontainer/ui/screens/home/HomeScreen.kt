@@ -15,11 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.khakomaki.memecontainer.ui.components.AddMemeFAB
+import com.khakomaki.memecontainer.ui.screens.home.components.HomeTabBar
+import com.khakomaki.memecontainer.ui.screens.home.components.HomeTabContent
+import com.khakomaki.memecontainer.ui.screens.home.components.HomeTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,38 +31,22 @@ fun HomeScreen(
     onMemeClick: (String) -> Unit,
     onAddMemeClick: () -> Unit
 ) {
-    val tabs = listOf("Folders", "All Memes")
-    var selectedTab by remember { mutableIntStateOf(0) }
+    var selectedTab by remember { mutableStateOf(Tab.Folders) }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("My Memes") },
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onAddMemeClick) {
-                Icon(Icons.Default.Add, contentDescription = "Add Meme")
-            }
-        }
+        topBar = { HomeTopBar() },
+        floatingActionButton = { AddMemeFAB(onAddMemeClick) }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            TabRow(selectedTabIndex = selectedTab) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        text = { Text(title) }
-                    )
-                }
-            }
+            HomeTabBar(selectedTab, onTabSelected = { selectedTab = it } )
 
             Spacer(modifier = Modifier.padding(8.dp))
 
-            when (selectedTab) {
-                0 -> FoldersTab(onFolderClick = {})
-                1 -> AllMemesTab(onMemeClick = onMemeClick)
-            }
+            HomeTabContent(
+                selectedTab = selectedTab,
+                onMemeClick = onMemeClick,
+                onFolderClick = {}
+            )
         }
     }
 }
