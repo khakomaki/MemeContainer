@@ -8,6 +8,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.khakomaki.memecontainer.data.model.Meme
 import com.khakomaki.memecontainer.data.model.MemeWithMetadata
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 
 @Dao
@@ -16,13 +18,13 @@ interface MemeDao {
     fun getAllMemes(): Observable<List<Meme>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMeme(meme: Meme)
+    fun insertMeme(meme: Meme): Completable
 
     @Delete
-    suspend fun deleteMeme(meme: Meme)
+    fun deleteMeme(meme: Meme): Completable
 
     @Query("SELECT * FROM memes WHERE id = :id")
-    suspend fun getMemeById(id: Long): Meme?
+    fun getMemeById(id: String): Maybe<Meme>
 
     @Transaction
     @Query("SELECT * FROM memes ORDER BY timestamp DESC")

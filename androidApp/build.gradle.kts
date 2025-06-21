@@ -66,5 +66,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     // rxJava
+    implementation(libs.rxandroid)
     implementation(libs.androidx.room.rxjava3)
 }

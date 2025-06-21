@@ -30,12 +30,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.khakomaki.memecontainer.ui.memes.MemeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMemeScreen(onMemeAdded: () -> Unit) {
-    var tags by remember { mutableStateOf("") }
+fun AddMemeScreen(
+    viewModel: MemeViewModel = viewModel(),
+    onMemeAdded: () -> Unit
+) {
+    val context = LocalContext.current
+    var title by remember { mutableStateOf("") }
+    var filePath by remember { mutableStateOf("memes/sample.jpg") }
 
     Scaffold(
         topBar = {
@@ -50,10 +58,10 @@ fun AddMemeScreen(onMemeAdded: () -> Unit) {
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                // Placeholder: save meme
+                viewModel.addMeme(filePath, title.ifBlank { null })
                 onMemeAdded()
             }) {
-                Icon(Icons.Default.Check, contentDescription = "Save Meme")
+                Icon(Icons.Default.Check, contentDescription = "Save")
             }
         }
     ) { padding ->
@@ -81,9 +89,9 @@ fun AddMemeScreen(onMemeAdded: () -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = tags,
-                onValueChange = { tags = it },
-                label = { Text("Tags (comma-separated)") },
+                value = title,
+                onValueChange = { title = it },
+                label = { Text("title") },
                 modifier = Modifier.fillMaxWidth()
             )
         }

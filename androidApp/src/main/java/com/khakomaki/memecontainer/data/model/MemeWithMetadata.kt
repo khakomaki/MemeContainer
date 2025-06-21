@@ -11,14 +11,22 @@ data class MemeWithMetadata(
     @Relation(
         parentColumn = "id",
         entityColumn = "name",
-        associateBy = Junction(MemeTagCrossRef::class)
+        associateBy = Junction(
+            value = MemeTagCrossRef::class,
+            parentColumn = "memeId",
+            entityColumn = "tagName"
+        )
     )
     val tags: List<Tag> = emptyList(),
 
     @Relation(
         parentColumn = "id",
         entityColumn = "id",
-        associateBy = Junction(MemeFolderCrossRef::class)
+        associateBy = Junction(
+            value = MemeFolderCrossRef::class,
+            parentColumn = "memeId",
+            entityColumn = "folderId"
+        )
     )
     val folders: List<Folder> = emptyList()
 )

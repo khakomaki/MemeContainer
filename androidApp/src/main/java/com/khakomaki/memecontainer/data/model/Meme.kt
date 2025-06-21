@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "memes")
 data class Meme(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     val id: String = UUID.randomUUID().toString(),
     val filePath: String,
     val title: String?,

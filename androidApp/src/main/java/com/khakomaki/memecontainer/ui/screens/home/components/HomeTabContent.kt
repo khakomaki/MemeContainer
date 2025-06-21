@@ -12,7 +12,7 @@ fun HomeTabContent(
     onFolderClick: (String) -> Unit
 ) {
     when (selectedTab) {
-        Tab.Folders -> FoldersTab(onFolderClick)
-        Tab.AllMemes -> AllMemesTab(onMemeClick)
+        Tab.Folders -> FoldersTab(onFolderClick = onFolderClick)
+        Tab.AllMemes -> AllMemesTab(onMemeClick = onMemeClick)
     }
 }
