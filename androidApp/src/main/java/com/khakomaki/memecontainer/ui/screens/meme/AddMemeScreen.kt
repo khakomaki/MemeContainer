@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.khakomaki.memecontainer.ui.memes.MemeViewModel
@@ -39,9 +38,8 @@ import com.khakomaki.memecontainer.ui.memes.MemeViewModel
 @Composable
 fun AddMemeScreen(
     viewModel: MemeViewModel = viewModel(),
-    onMemeAdded: () -> Unit
+    onBack: () -> Unit
 ) {
-    val context = LocalContext.current
     var title by remember { mutableStateOf("") }
     var filePath by remember { mutableStateOf("memes/sample.jpg") }
 
@@ -50,7 +48,7 @@ fun AddMemeScreen(
             TopAppBar(
                 title = { Text("Add Meme") },
                 navigationIcon = {
-                    IconButton(onClick = { onMemeAdded() }) {
+                    IconButton(onClick = onBack) {
                         Icon(Icons.Default.Close, contentDescription = "Cancel")
                     }
                 }
@@ -59,7 +57,7 @@ fun AddMemeScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 viewModel.addMeme(filePath, title.ifBlank { null })
-                onMemeAdded()
+                onBack()
             }) {
                 Icon(Icons.Default.Check, contentDescription = "Save")
             }

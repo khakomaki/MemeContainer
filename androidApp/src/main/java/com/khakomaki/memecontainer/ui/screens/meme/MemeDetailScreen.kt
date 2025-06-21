@@ -15,7 +15,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -32,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.khakomaki.memecontainer.data.model.Meme
 import com.khakomaki.memecontainer.ui.memes.MemeViewModel
+import com.khakomaki.memecontainer.util.formatTimeStamp
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -40,7 +40,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 @Composable
 fun MemeDetailScreen(
     viewModel: MemeViewModel = viewModel(),
-    memeId: String
+    memeId: String,
+    onBack: () -> Unit
 ) {
     var meme by remember { mutableStateOf<Meme?>(null) }
 
@@ -59,9 +60,11 @@ fun MemeDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Meme Detail") },
+                title = {
+                    Text(meme?.title ?: "Untitled")
+                },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle back */ }) {
+                    IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
@@ -74,14 +77,8 @@ fun MemeDetailScreen(
                     .padding(padding)
                     .fillMaxSize()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
-                Text("Title: ${it.title ?: "Untitled"}", style = MaterialTheme.typography.titleLarge)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Path: ${it.filePath}")
-                Spacer(modifier = Modifier.height(8.dp))
-                Text("Created at: ${it.timestamp}")
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -93,8 +90,9 @@ fun MemeDetailScreen(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-                Text("Tags: #funny #cats")
+                Text(formatTimeStamp(it.timestamp))
+                Spacer(modifier = Modifier.height(8.dp))
+                Text("Tags: #funny #cats") // TODO get Tags from Meme
             }
         } ?: Box(
             modifier = Modifier.fillMaxSize(),

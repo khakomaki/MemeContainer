@@ -30,11 +30,16 @@ fun MemeContainerNavHost() {
 
         composable(Routes.DETAIL) { backStackEntry ->
             val memeId = backStackEntry.arguments?.getString(MEME_ID) ?: return@composable
-            MemeDetailScreen(memeId = memeId)
+            MemeDetailScreen(
+                memeId = memeId,
+                onBack = { navController.popBackStack() }
+            )
         }
 
         composable(Routes.ADD) {
-            AddMemeScreen(onMemeAdded = { navController.popBackStack() })
+            AddMemeScreen(
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
