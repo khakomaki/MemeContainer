@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +24,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 @Composable
 fun AllMemesTab(
     viewModel: MemeViewModel = viewModel(),
-    onMemeClick: (String) -> Unit
+    onMemeClick: (String) -> Unit,
+    scrollState: LazyGridState
 ) {
     val memesState = remember { mutableStateOf<List<Meme>>(emptyList()) }
 
@@ -50,7 +52,8 @@ fun AllMemesTab(
 
         Grid(
             items = memesState.value,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            scrollState = scrollState
         ) { meme ->
             MemeCard(
                 name = meme.title ?: "Untitled",
