@@ -57,6 +57,7 @@ fun AllMemesTab(
         ) { meme ->
             MemeCard(
                 name = meme.title ?: "Untitled",
+                imagePath = meme.filePath,
                 onClick = { onMemeClick(meme.id) }
             )
         }

@@ -17,11 +17,14 @@ Android & Desktop Application for storing Memes.
 
 ## Upcoming Features
 
-- Add Text
+- Add Text to Meme
 - Lower Quality
 - User Accounts
 - Sharing Memes
 - Uploading Videos
+- Search by Untagged
+- Search by No Folder
+- Create Folder when creating Meme
 
 ## User Stories
 
