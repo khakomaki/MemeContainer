@@ -1,5 +1,9 @@
 package com.khakomaki.memecontainer.ui.components
 
+import android.util.Log
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -19,11 +23,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.rememberAsyncImagePainter
+import kotlin.math.abs
 
 @Composable
 fun ZoomableMeme(imagePath: String, modifier: Modifier = Modifier) {
     val zoomedInScale = 2f
     val zoomedOutScale = 1f
+    val squareThreshold = 0.25f
 
     var scale by remember { mutableFloatStateOf(1f) }
     var offsetX by remember { mutableFloatStateOf(0f) }
@@ -32,6 +38,27 @@ fun ZoomableMeme(imagePath: String, modifier: Modifier = Modifier) {
     var containerSize by remember { mutableStateOf(IntSize.Zero) }
 
     val isZoomedIn = scale !=zoomedOutScale
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isZoomedIn) zoomedInScale else zoomedOutScale,
+        animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing),
+        label = "ZoomAnimation"
+    )
+
+    val painter = rememberAsyncImagePainter(model = imagePath)
+    val memeSize = painter.intrinsicSize
+    Log.d("ZoomableMeme", "Meme dimensions [${memeSize.width}, ${memeSize.height}]")
+
+    val validSize = memeSize.width > 0 && memeSize.height > 0
+    val aspectRatio = if (validSize) memeSize.width / memeSize.height else 1f
+    val aspectDiff = abs(aspectRatio - 1f)
+    Log.d("ZoomableMeme", "Meme aspect ratio: $aspectRatio")
+
+    val panMode = when {
+        aspectDiff < squareThreshold -> "free"
+        aspectRatio > 1f -> "horizontal"
+        else -> "vertical"
+    }
+    Log.d("ZoomableMeme", "Selected panning mode: $panMode")
 
     Box(
         modifier = modifier
@@ -58,8 +85,19 @@ fun ZoomableMeme(imagePath: String, modifier: Modifier = Modifier) {
                         val maxOffsetX = ((imageSize.width * scale) - containerSize.width) / 2
                         val maxOffsetY = ((imageSize.height * scale) - containerSize.height) / 2
 
-                        offsetX = (offsetX + dx).coerceIn(-maxOffsetX, maxOffsetX)
-                        offsetY = (offsetY + dy).coerceIn(-maxOffsetY, maxOffsetY)
+                        // free/horizontal/vertical scrolling based on aspect ratio
+                        when (panMode) {
+                            "horizontal" -> {
+                                offsetX = (offsetX + dx).coerceIn(-maxOffsetX, maxOffsetX)
+                            }
+                            "vertical" -> {
+                                offsetY = (offsetY + dy).coerceIn(-maxOffsetY, maxOffsetY)
+                            }
+                            else -> {
+                                offsetX = (offsetX + dx).coerceIn(-maxOffsetX, maxOffsetX)
+                                offsetY = (offsetY + dy).coerceIn(-maxOffsetY, maxOffsetY)
+                            }
+                        }
                     }
                 } else {
                     detectTapGestures(
@@ -71,13 +109,13 @@ fun ZoomableMeme(imagePath: String, modifier: Modifier = Modifier) {
             }
     ) {
         Image(
-            painter = rememberAsyncImagePainter(model = imagePath),
+            painter = painter,
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
+                    scaleX = animatedScale
+                    scaleY = animatedScale
                     translationX = offsetX
                     translationY = offsetY
                 }
